@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FusionWeave XR | Smart Fashion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/IdeaSpaceVR/aframe-particle-system-component@1.0.0/dist/aframe-particle-system-component.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-light: #F1E5D1;
+            --accent-light: #DBB5B5;
+            --accent-med: #C39898;
+            --primary: #987070;
+            --white: #ffffff;
+        }
+
+        body, html { margin: 0; background-color: var(--bg-light); font-family: 'Segoe UI', sans-serif; height: 100%; overflow-x: hidden; }
+        header { background-color: var(--primary); color: var(--white); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; }
+        .main-wrapper { display: flex; min-height: 100vh; }
+        
+        nav.sidebar {
+            width: 250px;
+            background-color: var(--accent-med);
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+        nav.sidebar a {
+            padding: 20px 25px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 1px solid var(--accent-light);
+            transition: 0.3s;
+        }
+        nav.sidebar a:hover, nav.sidebar a.active { background-color: var(--primary); }
+
+        .content-area { flex-grow: 1; padding: 30px; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        .fabric-card { background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; border-left: 6px solid var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .viewport-container { height: 600px; width: 100%; position: relative; border-radius: 15px; overflow: hidden; background: #000; }
+
+        .star { font-size: 40px; cursor: pointer; color: #ccc; transition: 0.2s; }
+        .star.active { color: #FFD700; }
+
+        footer { background: var(--primary); color: white; padding: 40px 20px; }
+        .footer-map iframe { width: 100%; height: 200px; border-radius: 10px; border: none; }
+        
+        /* Custom Button Style for VR */
+        .vr-controls { display: flex; gap: 10px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>FUSIONWEAVE XR</h1>
+</header>
+
+<div class="main-wrapper">
+    <nav class="sidebar">
+        <a href="javascript:void(0)" onclick="showPage('home')" id="link-home" class="active">Home</a>
+        <a href="javascript:void(0)" onclick="showPage('fabric')" id="link-fabric">Fabric Details</a>
+        <a href="javascript:void(0)" onclick="showPage('model')" id="link-model">Model Preview</a>
+        <a href="javascript:void(0)" onclick="showPage('vr')" id="link-vr">VR Experience</a>
+        <a href="javascript:void(0)" onclick="showPage('review')" id="link-review">Review</a>
+        <a href="javascript:void(0)" onclick="showPage('about')" id="link-about">About Us</a>
+    </nav>
+
+    <div class="content-area">
+        <section id="home" class="page-section active">
+            <div class="p-5 mb-4 rounded-3" style="background-color: var(--accent-light);">
+                <h2 class="display-5 fw-bold" style="color: var(--primary);">Wear the Future.</h2>
+                <p class="fs-4">Experience high-tech Smart Fabrics integrated with traditional soul.</p>
+                <hr class="my-4">
+                <div class="row text-center">
+                    <div class="col-md-6 mb-3">
+                        <div class="p-3 bg-white rounded shadow-sm">
+                            <h4 style="color: var(--primary);">LIMITED OFFER</h4>
+                            <p>30% OFF on all Skirt Collections!</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-white rounded shadow-sm">
+                            <h4 style="color: var(--primary);">NEW ARRIVAL</h4>
+                            <p>Discover the LuminaWeave™ Glow Kurti.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="fabric" class="page-section">
+            <h2 style="color: var(--primary);">Our Fabric Innovation</h2>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="fabric-card">
+                        <h4>AeroSilk Core™</h4>
+                        <p>A blend designed for extreme lightness and high durability.</p>
+                        <div class="progress mb-2"> <div class="progress-bar" style="width: 60%; background: var(--primary)">Silk 60%</div> </div>
+                        <div class="progress"> <div class="progress-bar" style="width: 40%; background: var(--accent-med)">AeroPoly 40%</div> </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="fabric-card">
+                        <h4>ThermoBamb™</h4>
+                        <p>Natural bamboo fibers with integrated temperature-regulating mesh.</p>
+                        <div class="progress mb-2"> <div class="progress-bar" style="width: 75%; background: var(--primary)">Bamboo 75%</div> </div>
+                        <div class="progress"> <div class="progress-bar" style="width: 25%; background: var(--accent-med)">Thermal Yarn 25%</div> </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="model" class="page-section">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="sidebar-inner p-3 bg-white rounded">
+                        <label class="form-label">Garment Silhouette</label>
+                        <select id="modelSelect" class="form-select mb-3" onchange="changeModel()">
+                            <option value="models/skirts.glb">Luxe Skirt</option>
+                            <option value="models/top.glb">Crop Top</option>
+                            <option value="models/maxie.glb">Maxie Drape</option>
+                            <option value="models/top_1.glb">Short Kurti</option>
+                        </select>
+                        <label class="form-label">Smart Fabric</label>
+                        <select id="fabricSelect" class="form-select mb-3">
+                            <option value="textures/aerosilk.png">AeroSilk Core™</option>
+                            <option value="textures/luminaweave.png">LuminaWeave™</option>
+                            <option value="textures/thermobamb.png">ThermoBamb™</option>
+                        </select>
+                        <div class="rotation-control mb-3">
+                            <label class="form-label">Rotate View</label>
+                            <input type="range" class="form-range" id="rotateSlider" min="0" max="360" value="180" oninput="manualRotate(this.value)">
+                        </div>
+                        <button class="btn w-100" style="background: var(--primary); color: white;" onclick="applyFabric()">APPLY FABRIC</button>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="viewport-container" id="viewport">
+                        <a-scene embedded renderer="colorManagement: true;">
+                            <a-assets>
+                                <a-plane id="floor" rotation="-90 0 0" width="20" height="20" color="#EADBC8" opacity="0.5"></a-plane>
+                            </a-assets>
+                            <a-light type="ambient" intensity="1.2"></a-light>
+                            <a-light type="directional" position="1 3 2" intensity="1"></a-light>
+                            <a-entity id="garment-container" position="0 0 -4">
+                                <a-entity id="garment" gltf-model="models/skirts.glb" rotation="0 180 0"></a-entity>
+                            </a-entity>
+                            <a-sky color="#F1E5D1"></a-sky>
+                            <a-camera id="mainCam" position="0 1 0" look-controls="enabled: false"></a-camera>
+                        </a-scene>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vr" class="page-section">
+            <div class="vr-controls">
+                <button class="btn flex-grow-1" style="background:var(--primary); color:white;" onclick="startExperience()">Start Runway</button>
+                <button class="btn btn-danger" onclick="stopExperience()">Stop</button>
+            </div>
+            <audio id="bgMusic" src="jk.mp3" loop></audio>
+            <div class="viewport-container">
+                <a-scene embedded>
+                    <a-assets>
+                        <a-asset-item id="skirtModel" src="models/skirts.glb"></a-asset-item>
+                        <a-asset-item id="topModel" src="models/top.glb"></a-asset-item>
+                        <a-asset-item id="maxieModel" src="models/maxie.glb"></a-asset-item>
+                        <a-asset-item id="kurtiModel" src="models/top_1.glb"></a-asset-item>
+                    </a-assets>
+
+                    <a-entity id="rig" position="0 1.6 15">
+                        <a-camera wasd-controls-enabled="false">
+                            <a-cursor color="#FFB6C1"></a-cursor>
+                        </a-camera>
+                    </a-entity>
+
+                    <a-sky color="#0a0a0a"></a-sky>
+                    <a-grid position="0 0 0" cellColor="#FFB6C1" sectionColor="#FFB6C1" opacity="0.2"></a-grid>
+                    
+                    <a-entity position="0 0 -5">
+                        <a-text value="LUXE SKIRT" position="0 3.5 0" align="center" width="8" color="#F1E5D1"></a-text>
+                        <a-entity gltf-model="#skirtModel" scale="0.3 0.3 0.3" animation="property: rotation; to:0 360 0; loop:true; dur:6000"></a-entity>
+                    </a-entity>
+
+                    <a-entity position="0 0.8 -15">
+                        <a-text value="CROP TOP" position="0 2.5 0" align="center" width="8" color="#F1E5D1"></a-text>
+                        <a-entity gltf-model="#topModel" scale="1.2 1.2 1.2" animation="property: rotation; to:0 -360 0; loop:true; dur:6000"></a-entity>
+                    </a-entity>
+
+                    <a-entity position="0 0 -25">
+                        <a-text value="MAXIE DRAPE" position="0 3.5 0" align="center" width="8" color="#F1E5D1"></a-text>
+                        <a-entity gltf-model="#maxieModel" scale="0.3 0.3 0.3" animation="property: rotation; to:0 360 0; loop:true; dur:6000"></a-entity>
+                    </a-entity>
+
+                    <a-entity position="0 0 -35">
+                        <a-text value="SHORT KURTI" position="0 3.5 0" align="center" width="8" color="#F1E5D1"></a-text>
+                        <a-entity gltf-model="#kurtiModel" scale="0.3 0.3 0.3" animation="property: rotation; to:0 -360 0; loop:true; dur:6000"></a-entity>
+                    </a-entity>
+
+                    <a-entity particle-system="preset: dust; color: #FFB6C1; particleCount: 1000"></a-entity>
+                </a-scene>
+            </div>
+        </section>
+
+        <section id="review" class="page-section">
+            <div class="fabric-card">
+                <h3>Customer Reviews</h3>
+                <div class="star-group mb-3">
+                    <span class="star" onclick="setRating(1)">★</span>
+                    <span class="star" onclick="setRating(2)">★</span>
+                    <span class="star" onclick="setRating(3)">★</span>
+                    <span class="star" onclick="setRating(4)">★</span>
+                    <span class="star" onclick="setRating(5)">★</span>
+                </div>
+                <textarea id="reviewText" class="form-control mb-3" placeholder="Tell us what you think..."></textarea>
+                <button class="btn w-100" style="background:var(--primary); color:white;" onclick="saveReview()">Submit Review</button>
+            </div>
+        </section>
+
+        <section id="about" class="page-section">
+            <div class="fabric-card">
+                <h2>Our Vision</h2>
+                <p>FusionWeave XR is dedicated to blending traditional Indian textile art with modern smart-fiber technology.</p>
+                <hr>
+                <h5>Contact Support</h5>
+                <form action="mailto:23ucs009@kamarajengg.edu.in" method="POST" enctype="text/plain">
+                    <input type="text" name="Subject" class="form-control mb-2" placeholder="Inquiry Type" required>
+                    <textarea name="Body" class="form-control mb-3" placeholder="Message Content"></textarea>
+                    <button type="submit" class="btn btn-dark">Direct Mail to Support</button>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <h5>FusionWeave Global</h5>
+                <p>📧 23ucs009@kamarajengg.edu.in</p>
+                <p>📸 Instagram: @fusionweave_xr</p>
+            </div>
+            <div class="col-md-6">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3934.3315729724453!2d77.9511116147905!3d9.566810993149022!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00d2f09395f13d%3A0x6b63d95c156f710!2sKamaraj%20College%20of%20Engineering%20and%20Technology!5e0!3m2!1sen!2sin!4v1634567890123" allowfullscreen=""></iframe>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    function showPage(pageId) {
+        document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        document.getElementById('link-' + pageId).classList.add('active');
+        window.dispatchEvent(new Event('resize'));
+    }
+
+    // PAGE 2 LOGIC
+    const garment = document.querySelector("#garment");
+    garment.addEventListener('model-loaded', () => {
+        const mesh = garment.getObject3D('mesh');
+        const box = new THREE.Box3().setFromObject(mesh);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scaleFactor = 1.5 / maxDim;
+        garment.setAttribute('scale', `${scaleFactor} ${scaleFactor} ${scaleFactor}`);
+        garment.setAttribute('position', `${-center.x * scaleFactor} ${-center.y * scaleFactor + 1} 0`);
+    });
+
+    function changeModel() { garment.setAttribute('gltf-model', document.getElementById("modelSelect").value); }
+    function manualRotate(val) { garment.setAttribute('rotation', `0 ${val} 0`); }
+    
+    function applyFabric() {
+        const texturePath = document.getElementById("fabricSelect").value;
+        const loader = new THREE.TextureLoader();
+        loader.load(texturePath, (texture) => {
+            texture.flipY = false;
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(4, 4);
+            garment.object3D.traverse(node => {
+                if (node.isMesh) {
+                    node.material.map = texture;
+                    node.material.color.set('#ffffff');
+                    node.material.needsUpdate = true;
+                }
+            });
+        });
+    }
+
+    // PAGE 3 LOGIC (UPDATED WITH STOP COMPONENT)
+    AFRAME.registerComponent('runway-move', { 
+        tick: function() { 
+            this.el.object3D.position.z -= 0.04; 
+            if (this.el.object3D.position.z < -45) this.el.object3D.position.z = 15; 
+        } 
+    });
+
+    function startExperience() {
+        const music = document.querySelector('#bgMusic');
+        music.play().catch(e => console.log("Audio play blocked"));
+        document.querySelector('#rig').setAttribute('runway-move', '');
+    }
+
+    function stopExperience() {
+        document.querySelector('#bgMusic').pause();
+        document.querySelector('#rig').removeAttribute('runway-move');
+    }
+
+    // PAGE 4 LOGIC
+    let userRating = 0;
+    function setRating(n) {
+        userRating = n;
+        document.querySelectorAll('.star').forEach((s, idx) => s.classList.toggle('active', idx < n));
+    }
+    function saveReview() {
+        if(userRating === 0) return alert("Select stars first!");
+        alert("Review Submitted! Rating: " + userRating);
+        setRating(0); document.getElementById('reviewText').value = '';
+    }
+</script>
+</body>
+</html>
